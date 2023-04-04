@@ -4,9 +4,17 @@
 @model IEnumerable<Stadium>
 @{
 
+    <div class="container-md">
+    
+    <p>hello</p>
+    </div>
+
     @foreach(var std in Model)
     {
+        <div>
         <p>@std.Std_Name</p>
+        <a class="btn btn-success" asp-controller="Stadium" asp-action="Edit" asp-route-id="@std.StdID"></a>
+        </div>
     }
 }
 
