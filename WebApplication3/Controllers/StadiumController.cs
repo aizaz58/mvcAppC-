@@ -20,5 +20,101 @@ namespace WebApplication3.Controllers
 
             return View(Stadiums);
         }
+
+
+        //Get Stadiums Actionmethod
+        public IActionResult Create()
+        {
+            
+            return View();
+        }
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(Stadium obj)
+        {
+
+
+           
+
+
+
+         
+           
+          
+            
+
+              
+            
+            if(ModelState.IsValid)
+            {
+
+            _db.Stadiums.Add(obj);  
+            _db.SaveChanges();
+            return RedirectToAction("Index");
+            }
+            else
+            {
+                ModelState.AddModelError("Std_Name", $"{obj.Std_Name} is already present .kindly enter different name");
+                return View(obj);
+            }
+        }
+
+
+
+        //Edit
+        public IActionResult Edit(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+            else
+            {
+
+                var Std=_db.Stadiums.Find(id);
+
+            return View(Std);
+            }
+
+
+        }
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(Stadium obj)
+        {
+
+
+
+
+
+
+
+
+
+
+
+
+
+            if (ModelState.IsValid)
+            {
+
+                _db.Stadiums.Add(obj);
+                _db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                ModelState.AddModelError("Std_Name", $"{obj.Std_Name} is already present .kindly enter different name");
+                return View(obj);
+            }
+        }
     }
 }
+
+
