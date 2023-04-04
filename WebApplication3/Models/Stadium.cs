@@ -8,6 +8,8 @@ namespace WebApplication3.Models
         [Key]
         public int StdID { get; set; }
         [Required]
+        [MaxLength(50,ErrorMessage ="name can be max 50 char long ."),MinLength(10,ErrorMessage = "name can be  min 10 har short.")]
+      
         [DisplayName("Stadium Name")]
         public string Std_Name { get; set; }
         [DisplayName("City Name")]
