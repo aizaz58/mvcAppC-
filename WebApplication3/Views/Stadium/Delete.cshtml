@@ -1,26 +1,27 @@
 ﻿@model Stadium
 
-
+@{
+    ViewData["Title"] = "Create";
+}
 
 
 
 <div class="container-md">
 
-    <h2>Edit Stadium</h2>
-<form method="post" asp-action="Edit" >
-    <div asp-validation-summary="All"></div>
-    <input asp-for="StdID" hidden />
+    <h2>Delete Stadium</h2>
+<form method="post" asp-action="Delete" >
+   
     <div class="mb-3">
-        
+        <input hidden asp-for="StdID" />
     <label asp-for="Std_Name"></label>
     <input asp-for="Std_Name" class="form-control"/>
-    <span asp-validation-for="Std_Name" class="text-danger"></span>
+  
     </div>
     <div class="mb-3">
 
         <label asp-for="Std_Capacity"></label>
         <input asp-for="Std_Capacity" class="form-control" />
-            <span asp-validation-for="Std_Capacity" class="text-danger"></span>
+            
     </div>
 
 
@@ -31,7 +32,7 @@
         </div>
         <div class="mb-3">
 
-           <button type="submit" class="btn btn-primary">Update</button>
+           <button type="submit" class="btn btn-primary">Delete</button>
            <a asp-controller="Stadium" asp-action="Index" class="btn btn-secondary" >Back To List</a>
         </div>
 </form>

@@ -25,7 +25,7 @@ namespace WebApplication3.Controllers
         //Get Stadiums Actionmethod
         public IActionResult Create()
         {
-            
+
             return View();
         }
 
@@ -37,23 +37,12 @@ namespace WebApplication3.Controllers
         {
 
 
-           
-
-
-
-         
-           
-          
-            
-
-              
-            
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
 
-            _db.Stadiums.Add(obj);  
-            _db.SaveChanges();
-            return RedirectToAction("Index");
+                _db.Stadiums.Add(obj);
+                _db.SaveChanges();
+                return RedirectToAction("Index");
             }
             else
             {
@@ -74,9 +63,10 @@ namespace WebApplication3.Controllers
             else
             {
 
-                var Std=_db.Stadiums.Find(id);
+                var Std = _db.Stadiums.Find(id);
+                
 
-            return View(Std);
+                return View(Std);
             }
 
 
@@ -90,21 +80,10 @@ namespace WebApplication3.Controllers
         {
 
 
-
-
-
-
-
-
-
-
-
-
-
             if (ModelState.IsValid)
             {
-
-                _db.Stadiums.Add(obj);
+                
+                _db.Stadiums.Update(obj);
                 _db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -114,6 +93,58 @@ namespace WebApplication3.Controllers
                 return View(obj);
             }
         }
+
+
+
+
+
+
+        //Delete
+        public IActionResult Delete(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+            else
+            {
+
+                var Std = _db.Stadiums.Find(id);
+
+                return View(Std);
+            }
+
+
+        }
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(int id)
+        {
+
+
+
+            var Std = _db.Stadiums.Find(id);
+
+            if (Std == null)
+            {
+                return(NotFound());
+            }
+            _db.Stadiums.Remove(Std);
+                _db.SaveChanges();
+                return RedirectToAction("Index");
+            
+            
+        }
+
+
+
+
+
+
+
     }
 }
 

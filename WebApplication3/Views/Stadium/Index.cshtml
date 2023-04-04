@@ -6,16 +6,16 @@
 
     <div class="container-md">
     
-    <p>hello</p>
+    
     </div>
 
     @foreach(var std in Model)
     {
         <div>
         <p>@std.Std_Name</p>
-        <a class="btn btn-success" asp-controller="Stadium" asp-action="Edit" asp-route-id="@std.StdID"></a>
+        <a class="btn btn-success" asp-controller="Stadium" asp-action="Edit" asp-route-id="@std.StdID">Edit</a>
+        <a class="btn btn-danger" asp-controller="Stadium" asp-action="Delete" asp-route-id="@std.StdID">Delete</a>
         </div>
     }
 }
 
- <h1>Stadium PAge</h1>
