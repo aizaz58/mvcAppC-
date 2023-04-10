@@ -16,9 +16,8 @@ namespace WebApplication3.Controllers
         }
         public IActionResult Index()
         {
-            Stadiums = _db.Stadiums;
 
-            return View(Stadiums);
+            return View(_db.Stadiums.ToList());
         }
 
 
@@ -42,10 +41,12 @@ namespace WebApplication3.Controllers
 
                 _db.Stadiums.Add(obj);
                 _db.SaveChanges();
+                TempData["success"] = "Successfully created new stadium.";
                 return RedirectToAction("Index");
             }
             else
             {
+                TempData["error"] = "error has ocured.";
                 ModelState.AddModelError("Std_Name", $"{obj.Std_Name} is already present .kindly enter different name");
                 return View(obj);
             }
@@ -85,6 +86,7 @@ namespace WebApplication3.Controllers
                 
                 _db.Stadiums.Update(obj);
                 _db.SaveChanges();
+                TempData["success"] = "Successfully updated stadium.";
                 return RedirectToAction("Index");
             }
             else
@@ -134,7 +136,8 @@ namespace WebApplication3.Controllers
             }
             _db.Stadiums.Remove(Std);
                 _db.SaveChanges();
-                return RedirectToAction("Index");
+            TempData["success"] = "Successfully deleted stadium.";
+            return RedirectToAction("Index");
             
             
         }

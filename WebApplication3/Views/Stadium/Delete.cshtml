@@ -12,15 +12,15 @@
 <form method="post" asp-action="Delete" >
    
     <div class="mb-3">
-        <input hidden asp-for="StdID" />
+        <input hidden asp-for="Id" />
     <label asp-for="Std_Name"></label>
-    <input asp-for="Std_Name" class="form-control"/>
+    <input asp-for="Std_Name" disabled class="form-control"/>
   
     </div>
     <div class="mb-3">
 
         <label asp-for="Std_Capacity"></label>
-        <input asp-for="Std_Capacity" class="form-control" />
+            <input asp-for="Std_Capacity" disabled class="form-control" />
             
     </div>
 
@@ -28,7 +28,7 @@
         <div class="mb-3">
 
             <label asp-for="Std_CityName"></label>
-            <input asp-for="Std_CityName" class="form-control" />
+            <input asp-for="Std_CityName" disabled class="form-control" />
         </div>
         <div class="mb-3">
 
