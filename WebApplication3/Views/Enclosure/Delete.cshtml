@@ -1,0 +1,45 @@
+﻿@model Enclosure
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+
+
+<div class="container-md">
+
+    <h2>Delete Enclosure</h2>
+<form method="post" asp-action="Delete" >
+   
+    <div class="mb-3">
+        <input hidden asp-for="Id" />
+    <label asp-for="Name"></label>
+    <input asp-for="Name" disabled class="form-control"/>
+  
+    </div>
+    <div class="mb-3">
+
+        <label asp-for="Capacity"></label>
+            <input asp-for="Capacity" disabled class="form-control" />
+            
+    </div>
+
+
+        <div class="mb-3">
+
+            <label asp-for="PricePerSeat"></label>
+            <input asp-for="PricePerSeat" disabled class="form-control" />
+        </div>
+        <div class="mb-3">
+
+            <label asp-for="StadiumId"></label>
+            <input asp-for="StadiumId" disabled class="form-control" />
+        </div>
+        <div class="mb-3">
+
+           <button type="submit" class="btn btn-primary">Delete</button>
+           <a asp-controller="Enclosure" asp-action="Index" class="btn btn-secondary" >Back To List</a>
+        </div>
+</form>
+
+</div>

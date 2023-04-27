@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebApplication3.Models
 {
@@ -6,8 +7,12 @@ namespace WebApplication3.Models
     {
         [Key]
         public int Id { get; set; }
+        [Required]
+        [DisplayName("Match")]
         public int? MatchId { get; set; }
         public Match Matches { get; set; }
+        [Required]
+        [DisplayName("SeatNo")]
         public int? SeatId { get; set; }  
         public Seat Seats { get; set; }
         

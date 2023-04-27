@@ -18,9 +18,9 @@ namespace WebApplication3.Models
         public string Std_CityName { get; set; }
         [DisplayName("Stadium Capacity")]
         public int Std_Capacity { get; set; }
-        [NotMapped]
-        public ICollection<Enclosure> EnclosureId { get;  }=new List<Enclosure>();
-        public ICollection<Match> MatchId { get;  }= new List<Match>();
+        
+        public ICollection<Enclosure> Enclosures { get; set; } 
+        public ICollection<Match> Matches { get; set; }
        
         
     }

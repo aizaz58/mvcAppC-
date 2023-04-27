@@ -32,16 +32,12 @@ namespace WebApplication3.Models
         [DisplayName("Stadium")]
 
 
-
-        public Stadium Stadiums { get; set; }
         public int StadiumId { get; set; }
-
+        
+        public Stadium Stadiums { get; set; }
+   
         public ICollection<Seat> Seats { get; } 
-        //public List<Stadium> Stadiums { get; set; }
-        //[NotMapped ]
-        //public Seat SeatId { get; set; }
-
-        //public int StadiumId { get; set; }
+        
 
 
     }

@@ -1,0 +1,39 @@
+﻿@model Match
+
+
+
+
+<div class="container-md">
+
+    <h2>New Match</h2>
+    <form method="post">
+        <div asp-validation-summary="All"></div>
+        <div class="mb-3">
+
+            <label asp-for="MatchName"></label>
+            <input asp-for="MatchName" class="form-control" />
+            <span asp-validation-for="MatchName" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+
+            <label asp-for="MatchTime"></label>
+            <input asp-for="MatchTime" class="form-control" />
+            <span asp-validation-for="MatchTime" class="text-danger"></span>
+        </div>
+
+
+    
+        <div class="mb-3">
+
+            <label asp-for="StadiumId"></label>
+            <select asp-for="StadiumId" class="form-control" asp-items="ViewBag.StadiumId"></select>
+            @*  <input asp-for="StadiumId" class="form-control" />*@
+        </div>
+        <div class="mb-3">
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <a asp-controller="Match" asp-action="Index" class="btn btn-secondary">Back To List</a>
+        </div>
+    </form>
+
+</div>

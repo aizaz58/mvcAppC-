@@ -1,0 +1,36 @@
+﻿@model Ticket
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+
+
+<div class="container-md">
+
+    <h2>New Ticket</h2>
+    <form method="post">
+        <div asp-validation-summary="All"></div>
+        <div class="mb-3">
+
+            <label asp-for="MatchId"></label>
+            <select asp-for="MatchId" class="form-control" asp-items="ViewBag.MatchId"></select>
+            <span asp-validation-for="MatchId" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+
+            <label asp-for="SeatId"></label>
+            <select asp-for="SeatId" class="form-control" asp-items="ViewBag.SeatId"></select>
+            <span asp-validation-for="SeatId" class="text-danger"></span>
+        </div>
+
+
+       
+        <div class="mb-3">
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <a asp-controller="Tickets" asp-action="Index" class="btn btn-secondary">Back To List</a>
+        </div>
+    </form>
+
+</div>

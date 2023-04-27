@@ -33,7 +33,8 @@
         <div class="mb-3">
 
             <label asp-for="StadiumId"></label>
-            <input asp-for="StadiumId" class="form-control" />
+            <select asp-for="StadiumId" class="form-control" asp-items="ViewBag.StadiumId"></select>
+          @*  <input asp-for="StadiumId" class="form-control" />*@
         </div>
         <div class="mb-3">
 

@@ -17,7 +17,7 @@ namespace WebApplication3.Models
         public int SeatPrice { get; set; }
 
         
-        public ICollection<Ticket> Ticket { get; set; }=new List<Ticket>();
+        public ICollection<Ticket> Ticket { get; set; }
         public int EnclosureId { get; set; }
         public Enclosure Enclosures { get; set; }
        
