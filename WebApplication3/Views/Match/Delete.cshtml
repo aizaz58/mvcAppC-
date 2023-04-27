@@ -1,0 +1,41 @@
+﻿@model Match
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+
+
+<div class="container-md">
+
+    <h2>Delete Match</h2>
+<form method="post" asp-action="Delete" >
+   
+    <div class="mb-3">
+        <input hidden asp-for="Id" />
+    <label asp-for="MatchName"></label>
+            <input asp-for="MatchName" disabled class="form-control" />
+  
+    </div>
+    <div class="mb-3">
+
+        <label asp-for="MatchTime"></label>
+            <input asp-for="MatchTime" disabled class="form-control" />
+            
+    </div>
+
+
+        <div class="mb-3">
+
+            <label asp-for="StadiumId"></label>
+           <select class="form-control"  asp-for="StadiumId"  disabled asp-items="ViewBag.StadiumId"></select>
+           
+        </div>
+        <div class="mb-3">
+
+           <button type="submit" class="btn btn-primary">Delete</button>
+           <a asp-controller="Enclosure" asp-action="Index" class="btn btn-secondary" >Back To List</a>
+        </div>
+</form>
+
+</div>
