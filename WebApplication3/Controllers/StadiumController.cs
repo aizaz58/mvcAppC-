@@ -2,22 +2,26 @@
 using System.Collections.Generic;
 using WebApplication3.Data;
 using WebApplication3.Models;
+using WebApplication3.Repositories;
 
 namespace WebApplication3.Controllers
 {
     public class StadiumController : Controller
     {
-        private readonly ApplicationDbContext _db;
+        
+        private readonly IUnitOfWork _unitOfWork;
+
         public IEnumerable<Stadium> Stadiums { get; set; }
 
-        public StadiumController(ApplicationDbContext db)
+        public StadiumController(IUnitOfWork unitOfWork)
         {
-            _db = db;
+           
+            this._unitOfWork = unitOfWork;
         }
         public IActionResult Index()
         {
 
-            return View(_db.Stadiums.ToList());
+            return View(_unitOfWork.Stadium.GetAll().ToList());
         }
 
 
@@ -38,9 +42,10 @@ namespace WebApplication3.Controllers
 
             if (ModelState.IsValid)
             {
-
-                _db.Stadiums.Add(obj);
-                _db.SaveChanges();
+                _unitOfWork.Stadium.Add(obj);
+                _unitOfWork.Save();
+                // _db.Stadiums.Add(obj);
+               // _db.SaveChanges();
                 TempData["success"] = "Successfully created new stadium.";
                 return RedirectToAction("Index");
             }
@@ -55,7 +60,7 @@ namespace WebApplication3.Controllers
 
 
         //Edit
-        public IActionResult Edit(int? id)
+        public IActionResult Edit(int id)
         {
             if (id == null || id == 0)
             {
@@ -64,7 +69,7 @@ namespace WebApplication3.Controllers
             else
             {
 
-                var Std = _db.Stadiums.Find(id);
+                var Std = _unitOfWork.Stadium.GetById(id);
                 
 
                 return View(Std);
@@ -83,9 +88,9 @@ namespace WebApplication3.Controllers
 
             if (ModelState.IsValid)
             {
+                _unitOfWork.Stadium.Update(obj);
+                _unitOfWork.Save();
                 
-                _db.Stadiums.Update(obj);
-                _db.SaveChanges();
                 TempData["success"] = "Successfully updated stadium.";
                 return RedirectToAction("Index");
             }
@@ -111,7 +116,8 @@ namespace WebApplication3.Controllers
             else
             {
 
-                var Std = _db.Stadiums.Find(id);
+                var Std = _unitOfWork.Stadium.GetById(id);
+
 
                 return View(Std);
             }
@@ -128,14 +134,14 @@ namespace WebApplication3.Controllers
 
 
 
-            var Std = _db.Stadiums.Find(id);
+            var Std = _unitOfWork.Stadium.GetById(id);
 
             if (Std == null)
             {
                 return(NotFound());
             }
-            _db.Stadiums.Remove(Std);
-                _db.SaveChanges();
+            _unitOfWork.Stadium.Delete(Std);
+            _unitOfWork.Save();
             TempData["success"] = "Successfully deleted stadium.";
             return RedirectToAction("Index");
             

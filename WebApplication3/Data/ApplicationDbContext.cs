@@ -19,9 +19,9 @@ namespace WebApplication3.Data
         public DbSet<Seat> Seats { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<Match> Matches { get; set; }
-       
-    }
 
+      
+    }
 
 
 
