@@ -7,132 +7,123 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebApplication3.Data;
 using WebApplication3.Models;
+using WebApplication3.Repositories;
 
 namespace WebApplication3.Controllers
 {
     public class SeatsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+      
+        private readonly IUnitOfWork _unitOfWork;
 
-        public SeatsController(ApplicationDbContext context)
+        public SeatsController(IUnitOfWork unitOfWork)
         {
-            _context = context;
+           
+            this._unitOfWork = unitOfWork;
         }
 
         // GET: Seats
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var applicationDbContext = _context.Seats.Include(s => s.Enclosures);
-            return View(await applicationDbContext.ToListAsync());
+            var seats = _unitOfWork.Seat.GetAll().ToList();
+            return View( seats);
         }
 
-        // GET: Seats/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Seats == null)
-            {
-                return NotFound();
-            }
+       
+        //public async Task<IActionResult> Details(int? id)
+        //{
+        //    if (id == null || _context.Seats == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var seat = await _context.Seats
-                .Include(s => s.Enclosures)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (seat == null)
-            {
-                return NotFound();
-            }
+        //    var seat = await _context.Seats
+        //        .Include(s => s.Enclosures)
+        //        .FirstOrDefaultAsync(m => m.Id == id);
+        //    if (seat == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return View(seat);
-        }
+        //    return View(seat);
+        //}
 
         // GET: Seats/Create
         public IActionResult Create()
         {
-            ViewData["EnclosureId"] = new SelectList(_context.Enclosures, "Id", "Name");
+            ViewData["EnclosureId"] = new SelectList(_unitOfWork.Enclosure.GetAll(), "Id", "Name");
             return View();
         }
 
-        // POST: Seats/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+       
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,SeatNo,SeatPrice,EnclosureId")] Seat seat)
+        public IActionResult Create( Seat seat)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(seat);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+               _unitOfWork.Seat.Add(seat);
+                _unitOfWork.Save();
+                return RedirectToAction("Index");
             }
-            ViewData["EnclosureId"] = new SelectList(_context.Enclosures, "Id", "Name", seat.EnclosureId);
+            ViewData["EnclosureId"] = new SelectList(_unitOfWork.Enclosure.GetAll(), "Id", "Name", seat.EnclosureId);
             return View(seat);
         }
 
-        // GET: Seats/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+       
+        public IActionResult Edit(int? id)
         {
-            if (id == null || _context.Seats == null)
+            if (id == null || _unitOfWork.Seat.GetAll() == null)
             {
                 return NotFound();
             }
 
-            var seat = await _context.Seats.FindAsync(id);
+            var seat = _unitOfWork.Seat.GetById(id);
             if (seat == null)
             {
                 return NotFound();
             }
-            ViewData["EnclosureId"] = new SelectList(_context.Enclosures, "Id", "Name", seat.EnclosureId);
+            ViewData["EnclosureId"] = new SelectList(_unitOfWork.Enclosure.GetAll(), "Id", "Name", seat.EnclosureId);
             return View(seat);
         }
 
-        // POST: Seats/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+      
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,SeatNo,SeatPrice,EnclosureId")] Seat seat)
+        public IActionResult Edit( Seat seat)
         {
-            if (id != seat.Id)
+            if (seat ==null)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(seat);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!SeatExists(seat.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                
+                    _unitOfWork.Seat.Update(seat);
+                    _unitOfWork.Save();
+                TempData["success"] = "Successfully updated.";
+
+
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EnclosureId"] = new SelectList(_context.Enclosures, "Id", "Name", seat.EnclosureId);
+            ViewData["EnclosureId"] = new SelectList(_unitOfWork.Enclosure.GetAll(), "Id", "Name", seat.EnclosureId);
             return View(seat);
         }
 
-        // GET: Seats/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        
+        public IActionResult Delete(int? id)
         {
-            if (id == null || _context.Seats == null)
+            if (id == null ||_unitOfWork.Seat.GetAll() == null)
             {
-                return NotFound();
+                return Problem("Entity set 'ApplicationDbContext.Seats'  is null.");
+                
             }
 
-            var seat = await _context.Seats
-                .Include(s => s.Enclosures)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var seat = _unitOfWork.Seat.GetById(id);
+              //  .Include(s => s.Enclosures)
+               // .FirstOrDefaultAsync(m => m.Id == id);
             if (seat == null)
             {
                 return NotFound();
@@ -144,25 +135,27 @@ namespace WebApplication3.Controllers
         // POST: Seats/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult Delete(int id)
         {
-            if (_context.Seats == null)
+            if (_unitOfWork.Seat.GetById(id) == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.Seats'  is null.");
+                return NotFound();
             }
-            var seat = await _context.Seats.FindAsync(id);
-            if (seat != null)
+            var seat = _unitOfWork.Seat.GetById(id);
+            if (seat == null)
             {
-                _context.Seats.Remove(seat);
+                TempData["error"] = "error occured while deleting.";
+                return View();
+
             }
-            
-            await _context.SaveChangesAsync();
+            _unitOfWork.Seat.Delete(seat);
+                _unitOfWork.Save();
+            TempData["success"] = "Successfully deleted.";
             return RedirectToAction(nameof(Index));
+            
+           
         }
 
-        private bool SeatExists(int id)
-        {
-          return _context.Seats.Any(e => e.Id == id);
-        }
+      
     }
 }

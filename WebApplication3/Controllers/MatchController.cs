@@ -9,16 +9,16 @@ namespace WebApplication3.Controllers
     public class MatchController : Controller
     {
         private readonly ApplicationDbContext _dbContext;
-        public IEnumerable<Match> matches { get; set; }
+        public IEnumerable<Match> Matches { get; set; }
         public MatchController(ApplicationDbContext db)
         {
             _dbContext = db;
         }
         public IActionResult Index()
         {
-            matches = _dbContext.Matches.Include(s=>s.Stadiums);
+            Matches = _dbContext.Matches.Include(s=>s.Stadiums);
 
-            return View(matches);
+            return View(Matches);
         }
 
         public IActionResult Create()
@@ -42,7 +42,7 @@ namespace WebApplication3.Controllers
 
 
 
-            return View(matches);
+            return View(Matches);
         }
 
 
@@ -74,7 +74,7 @@ namespace WebApplication3.Controllers
 
 
 
-            return View(matches);
+            return View(Matches);
         }
         public IActionResult Delete(int? id)
         {
