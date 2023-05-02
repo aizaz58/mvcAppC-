@@ -1,4 +1,5 @@
-﻿using WebApplication3.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using WebApplication3.Data;
 using WebApplication3.Repositories;
 
 namespace WebApplication3.Implementation
@@ -6,35 +7,37 @@ namespace WebApplication3.Implementation
     public class Genericrepository<T>:IGenericRepository<T> where T : class
     {
         private readonly ApplicationDbContext _context;
+        private readonly DbSet<T> _dbSet;
 
         public Genericrepository(ApplicationDbContext context)
         {
             this._context = context;
+            this._dbSet=_context.Set<T>();
         }
 
         public void Add(T entity)
         {
-           _context.Set<T>().Add(entity);
+           _dbSet.Add(entity);
         }
 
         public void Delete(T entity)
         {
-        _context.Set<T>().Remove(entity);
+            _dbSet.Remove(entity);
         }
 
         public IEnumerable<T> GetAll()
         {
-          return  _context.Set<T>().ToList();
+          return  _dbSet.ToList();
         }
 
         public T GetById(int? id)
         {
-            return _context.Set<T>().Find(id);
+            return _dbSet.Find(id);
         }
 
         public void Update(T entity)
         {
-             _context.Set<T>().Update(entity);
+             _dbSet.Update(entity);
             
         }
     }

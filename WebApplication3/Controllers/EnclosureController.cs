@@ -10,7 +10,7 @@ namespace WebApplication3.Controllers
 {
     public class EnclosureController : Controller
     {
-        //public IEnumerable<Enclosure> Enclosures { get; set; }
+        public IEnumerable<Enclosure> Enclosures { get; set; }
         
         private readonly IUnitOfWork _unitOfWork;
 
@@ -18,13 +18,15 @@ namespace WebApplication3.Controllers
         {
             
             this._unitOfWork = unitOfWork;
+
         }
         public IActionResult Index()
         {
             ViewData["StadiumId"] = new SelectList(_unitOfWork.Stadium.GetAll(), "Id", "Std_Name");
 
-          //  IEnumerable<Enclosure> Enclosures = _unitOfWork.Enclosure.GetAll().ToList();
-            return View(_unitOfWork.Enclosure.GetAll().ToList());
+            // IEnumerable<Enclosure> Enclosures = _unitOfWork.Enclosure.GetAll().ToList();
+            IEnumerable<Enclosure> Enclosures= _unitOfWork.Enclosure.IncludeOther(x=>x.Stadiums);
+            return View(Enclosures);
         }
 
         public IActionResult Create()
@@ -68,7 +70,7 @@ namespace WebApplication3.Controllers
         {
             if (id == 0 || id == null)
                 return NotFound();
-
+            ViewData["StadiumId"] = new SelectList(_unitOfWork.Stadium.GetAll(), "Id", "Std_Name");
             var Enc=_unitOfWork.Enclosure.GetById(id);
 
             return View(Enc);
@@ -83,7 +85,7 @@ namespace WebApplication3.Controllers
             if (ModelState.IsValid)
             {
 
-                _unitOfWork.Enclosure.Add(obj);
+                _unitOfWork.Enclosure.Update(obj);
                 _unitOfWork.Save();
                 TempData["success"] = "Successfully updated  enclosure.";
                 ViewData["StadiumId"] = new SelectList(_unitOfWork.Stadium.GetAll(), "Id", "Name", obj.StadiumId);
