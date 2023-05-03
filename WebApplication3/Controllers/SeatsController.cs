@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebApplication3.Data;
 using WebApplication3.Models;
-using WebApplication3.Repositories;
+using WebApplication3.Services;
 
 namespace WebApplication3.Controllers
 {
@@ -25,7 +25,8 @@ namespace WebApplication3.Controllers
         // GET: Seats
         public IActionResult Index()
         {
-            var seats = _unitOfWork.Seat.GetAll().ToList();
+
+            var seats = _unitOfWork.Seat.IncludeOther(x=>x.Enclosures).ToList();
             return View( seats);
         }
 

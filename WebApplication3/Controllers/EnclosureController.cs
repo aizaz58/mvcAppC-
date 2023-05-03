@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Text;
 using WebApplication3.Data;
 using WebApplication3.Models;
-using WebApplication3.Repositories;
+using WebApplication3.Services;
 
 namespace WebApplication3.Controllers
 {
@@ -23,7 +23,7 @@ namespace WebApplication3.Controllers
         public IActionResult Index()
         {
             ViewData["StadiumId"] = new SelectList(_unitOfWork.Stadium.GetAll(), "Id", "Std_Name");
-
+            
             // IEnumerable<Enclosure> Enclosures = _unitOfWork.Enclosure.GetAll().ToList();
             IEnumerable<Enclosure> Enclosures= _unitOfWork.Enclosure.IncludeOther(x=>x.Stadiums);
             return View(Enclosures);

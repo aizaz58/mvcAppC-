@@ -16,10 +16,7 @@ namespace WebApplication3.Implementation
         }
 
         
-public void IncludeOther()
-        {
-            throw new NotImplementedException();
-        }
+
 
         public IEnumerable<Enclosure> IncludeOther(Expression<Func<Enclosure, Stadium>> expression)=>
         
