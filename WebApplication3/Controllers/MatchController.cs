@@ -3,27 +3,32 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebApplication3.Data;
 using WebApplication3.Models;
+using WebApplication3.Services;
 
 namespace WebApplication3.Controllers
 {
     public class MatchController : Controller
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly IUnitOfWork _unitOfWork;
+
         public IEnumerable<Match> Matches { get; set; }
-        public MatchController(ApplicationDbContext db)
+        public MatchController(IUnitOfWork unitOfWork)
         {
-            _dbContext = db;
+            
+            this._unitOfWork = unitOfWork;
         }
         public IActionResult Index()
         {
-            Matches = _dbContext.Matches.Include(s=>s.Stadiums);
+            Matches = _unitOfWork.Match.IncludeOther(x=>x.Stadiums).ToList();
+
 
             return View(Matches);
         }
 
         public IActionResult Create()
         {
-            ViewData["StadiumId"] = new SelectList(_dbContext.Stadiums, "Id", "Std_Name");
+            ViewData["StadiumId"] = new SelectList(_unitOfWork.Stadium.GetAll(), "Id", "Std_Name");
 
             return View();
         }
@@ -34,8 +39,8 @@ namespace WebApplication3.Controllers
         {
            if(ModelState.IsValid)
             {
-                _dbContext.Matches.Add(match);
-                _dbContext.SaveChanges();
+                _unitOfWork.Match.Add(match);
+                _unitOfWork.Save();
                 TempData["success"] = "successfully created";
                 return RedirectToAction("Index");
             }
@@ -51,8 +56,8 @@ namespace WebApplication3.Controllers
 
         public IActionResult Edit(int id)
         {
-            var Match = _dbContext.Matches.Find(id);
-            ViewData["StadiumId"] = new SelectList(_dbContext.Stadiums, "Id", "Std_Name",Match.StadiumId);
+            var Match = _unitOfWork.Match.GetById(id);
+            ViewData["StadiumId"] = new SelectList(_unitOfWork.Stadium.GetAll(), "Id", "Std_Name",Match.StadiumId);
 
 
 
@@ -66,8 +71,8 @@ namespace WebApplication3.Controllers
         {
             if (ModelState.IsValid)
             {
-                _dbContext.Matches.Update(match);
-                _dbContext.SaveChanges();
+                _unitOfWork.Match.Update(match);
+                _unitOfWork.Save();
                 TempData["success"] = "successfully created";
                 return RedirectToAction("Index");
             }
@@ -78,14 +83,14 @@ namespace WebApplication3.Controllers
         }
         public IActionResult Delete(int? id)
         {
-            var Match = _dbContext.Matches.Find(id);
+            var Match = _unitOfWork.Match.GetById(id);
             if (id == null || id == 0||Match==null)
             {
                 TempData["error"] = "no record found.";
                 return NotFound();
 
             }
-            ViewData["StadiumId"] = new SelectList(_dbContext.Stadiums, "Id", "Std_Name",Match.StadiumId);
+            ViewData["StadiumId"] = new SelectList(_unitOfWork.Stadium.GetAll(), "Id", "Std_Name",Match.StadiumId);
            
             return View(Match);
         }
@@ -95,11 +100,11 @@ namespace WebApplication3.Controllers
         public IActionResult Delete(int id)
         {
 
-            var Match = _dbContext.Matches.Find(id);
+            var Match = _unitOfWork.Match.GetById(id);
             if (Match != null)
             {
-                _dbContext.Matches.Remove(Match);
-                _dbContext.SaveChanges();
+                _unitOfWork.Match.Delete(Match);
+                _unitOfWork.Save();
                 TempData["success"] = "Successfully deleted the record.";
                 return RedirectToAction("Index");
             }

@@ -3,22 +3,26 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebApplication3.Data;
 using WebApplication3.Models;
+using WebApplication3.Repositories;
 
 namespace WebApplication3.Controllers
 {
     public class TicketsController : Controller
     {
-        private readonly ApplicationDbContext _dbContext;
+
+        private readonly IUnitOfWork _unitOfWork;
+
         public IEnumerable<Ticket> Tickets { get; set; }
-        public TicketsController(ApplicationDbContext db)
+        public TicketsController(IUnitOfWork unitOfWork)
         {
-            _dbContext = db;
+       
+            this._unitOfWork = unitOfWork;
         }
         public IActionResult Index()
         {
-            var ticket1 = _dbContext.Tickets;
+            //var ticket1 = _unitOfWork.Ticket.GetAll();
 
-            Tickets = _dbContext.Tickets.Include(s=>s.Seats).Include(y=>y.Matches);
+            Tickets = _unitOfWork.Ticket.IncludeOther(s=>s.Matches );
 
             return View(Tickets);
         }
@@ -28,8 +32,8 @@ namespace WebApplication3.Controllers
         public IActionResult Create()
         {
             
-            ViewData["Matchid"] = new SelectList(_dbContext.Matches,"Id", "MatchName") ;
-            ViewData["SeatId"] = new SelectList(_dbContext.Seats,"Id","SeatNo");
+            ViewData["Matchid"] = new SelectList(_unitOfWork.Match.GetAll(),"Id", "MatchName") ;
+            ViewData["SeatId"] = new SelectList(_unitOfWork.Seat.GetAll(),"Id","SeatNo");
 
             return View();
         }
@@ -43,8 +47,8 @@ namespace WebApplication3.Controllers
 
             if(ModelState.IsValid)
             {
-                _dbContext.Tickets.Add(tkt);
-                _dbContext.SaveChanges();
+                _unitOfWork.Ticket.Add(tkt);
+                _unitOfWork.Save();
                 TempData["success"] = $"Ticket No.{tkt.Id} has created successfully.";
                 return RedirectToAction("Index");
             }
@@ -61,15 +65,15 @@ namespace WebApplication3.Controllers
         {
             if (id == 0)
                 return NotFound();
-            var Tkt = _dbContext.Tickets.Find(id);
+            var Tkt = _unitOfWork.Ticket.GetById(id);
             if (Tkt == null)
             {
                 TempData["error"] = "no Ticket found.";
                 return NotFound();
 
             }
-            ViewData["Matchid"] = new SelectList(_dbContext.Matches, "Id", "MatchName",Tkt.MatchId);
-            ViewData["SeatId"] = new SelectList(_dbContext.Seats, "Id", "SeatNo",Tkt.SeatId);
+            ViewData["Matchid"] = new SelectList(_unitOfWork.Match.GetAll(), "Id", "MatchName",Tkt.MatchId);
+            ViewData["SeatId"] = new SelectList(_unitOfWork.Seat.GetAll(), "Id", "SeatNo",Tkt.SeatId);
 
             return View(Tkt);
         }
@@ -83,8 +87,8 @@ namespace WebApplication3.Controllers
 
             if (ModelState.IsValid)
             {
-                _dbContext.Tickets.Update(tkt);
-                _dbContext.SaveChanges();
+                _unitOfWork.Ticket.Update(tkt);
+                _unitOfWork.Save();
                 TempData["success"] = $"Ticket No.{tkt.Id} has created successfully.";
                 return RedirectToAction("Index");
             }
@@ -102,7 +106,7 @@ namespace WebApplication3.Controllers
         {
             if (id == 0)
                 return NotFound();
-            var Tkt = _dbContext.Tickets.Find(id);
+            var Tkt = _unitOfWork.Ticket.GetById(id);
             
             if (Tkt == null)
             {
@@ -110,8 +114,8 @@ namespace WebApplication3.Controllers
                 return NotFound();
 
             }
-            ViewData["Matchid"] = new SelectList(_dbContext.Matches, "Id", "MatchName");
-            ViewData["SeatId"] = new SelectList(_dbContext.Seats, "Id", "SeatNo");
+            ViewData["Matchid"] = new SelectList(_unitOfWork.Match.GetAll(), "Id", "MatchName");
+            ViewData["SeatId"] = new SelectList(_unitOfWork.Seat.GetAll(), "Id", "SeatNo");
 
             return View(Tkt);
         }
@@ -122,14 +126,14 @@ namespace WebApplication3.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Delete(int? id)
         {
-            var Ticket = _dbContext.Tickets.Find(id);
+            var Ticket = _unitOfWork.Ticket.GetById(id);
             if (Ticket==null)
             {
             TempData["error"] = "not found.";
                 return NotFound();
             }
-            _dbContext.Tickets.Remove(Ticket);
-            _dbContext.SaveChanges();
+            _unitOfWork.Ticket.Delete(Ticket);
+            _unitOfWork.Save();
             TempData["success"] = $"Ticket No.{Ticket.Id} has been deleted successfully.";
             return RedirectToAction("Index");
 
