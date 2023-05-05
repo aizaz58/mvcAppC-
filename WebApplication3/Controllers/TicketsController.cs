@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 using WebApplication3.Data;
 using WebApplication3.Models;
-using WebApplication3.Repositories;
+using WebApplication3.Services;
 
 namespace WebApplication3.Controllers
 {
@@ -12,7 +13,7 @@ namespace WebApplication3.Controllers
 
         private readonly IUnitOfWork _unitOfWork;
 
-        public IEnumerable<Ticket> Tickets { get; set; }
+        public IQueryable<Ticket> Tickets { get; set; }
         public TicketsController(IUnitOfWork unitOfWork)
         {
        
@@ -20,10 +21,28 @@ namespace WebApplication3.Controllers
         }
         public IActionResult Index()
         {
+
             //var ticket1 = _unitOfWork.Ticket.GetAll();
+            //Expression<Func<Ticket, Match>> matchEx = x => x.Matches;
+            //Expression<Func<Ticket, Seat>> SeatExp = x => x.Seats;
+            //List<Expression>expressions = new List<Expression>();
+            //expressions.Add(matchEx);
+            //expressions.Add(SeatExp);
+            Expression<Func<Ticket, Match>> MatchExp = x => x.Matches;
+            Expression<Func<Ticket, Seat>> SeatExp = x => x.Seats;
 
-            Tickets = _unitOfWork.Ticket.IncludeOther(s=>s.Matches );
 
+
+
+            //Expression<Func<Ticket, bool>> combinedExpr = Expression.Lambda<Func<Ticket, bool>>(
+    
+
+
+
+
+
+            Tickets = _unitOfWork.Ticket.IncludeOther(x=>x.Matches);
+            Tickets = Tickets.Include(x => x.Seats);
             return View(Tickets);
         }
 

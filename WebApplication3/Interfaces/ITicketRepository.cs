@@ -1,11 +1,25 @@
 ﻿using System.Linq.Expressions;
 using WebApplication3.Models;
+using WebApplication3.Repositories;
 
-namespace WebApplication3.Repositories
+namespace WebApplication3.Interfaces
 {
-    public interface ITicketRepository:IGenericRepository<Ticket>
+    public interface ITicketRepository : IGenericRepository<Ticket>
     {
 
-        public IEnumerable<Ticket> IncludeOther(Expression<Func<Ticket, Match>> expression);
+        public IQueryable<Ticket> IncludeOther(Expression<Func<Ticket,Match>> expression);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

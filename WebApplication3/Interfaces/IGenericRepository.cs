@@ -1,20 +1,19 @@
-﻿namespace WebApplication3.Repositories
+﻿namespace WebApplication3.Interfaces;
+
+public interface IGenericRepository<T> where T : class 
 {
-    public interface IGenericRepository<T> where T : class 
-    {
 
-        IEnumerable<T> GetAll();
-        T GetById(int? id);
-        void Add(T entity);
-        void Update(T entity);
-        void Delete(T entity);
-    }
-    
-
-
-
-
-
-
-    
+    IEnumerable<T> GetAll();
+    T GetById(int? id);
+    void Add(T entity);
+    void Update(T entity);
+    void Delete(T entity);
 }
+
+
+
+
+
+
+
+

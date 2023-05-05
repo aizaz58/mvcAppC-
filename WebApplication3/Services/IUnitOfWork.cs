@@ -1,4 +1,4 @@
-﻿using WebApplication3.Repositories;
+﻿using WebApplication3.Interfaces;
 
 namespace WebApplication3.Services
 {

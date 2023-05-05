@@ -1,10 +1,9 @@
 ﻿using System.Linq.Expressions;
 using WebApplication3.Models;
 
-namespace WebApplication3.Repositories
+namespace WebApplication3.Interfaces;
+
+public interface IMatchRepository:IGenericRepository<Match>
 {
-    public interface IMatchRepository:IGenericRepository<Match>
-    {
-        public IEnumerable<Match> IncludeOther(Expression<Func<Match, Stadium>> expression);
-    }
+    public IEnumerable<Match> IncludeOther(Expression<Func<Match, Stadium>> expression);
 }

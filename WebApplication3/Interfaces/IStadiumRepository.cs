@@ -1,10 +1,9 @@
 ﻿using WebApplication3.Models;
 
-namespace WebApplication3.Repositories
+namespace WebApplication3.Interfaces;
+
+public interface IStadiumRepository:IGenericRepository<Stadium>
 {
-    public interface IStadiumRepository:IGenericRepository<Stadium>
-    {
 
 
-    }
 }
