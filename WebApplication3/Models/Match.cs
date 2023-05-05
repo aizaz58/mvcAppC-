@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualBasic;
+﻿using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
+using Microsoft.VisualBasic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using WebApplication3.Models;
@@ -15,7 +16,7 @@ namespace WebApplication3.Models
         public DateTime MatchTime { get; set; }
 
         
-        public ICollection<Ticket> Ticket { get; set; }=new List<Ticket>();
+        public ICollection<Ticket> Ticket { get; set; } =new List<Ticket>();
 
         public int StadiumId { get; set; }
         public Stadium Stadiums { get; set; }
