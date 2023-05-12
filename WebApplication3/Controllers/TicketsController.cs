@@ -35,14 +35,16 @@ namespace WebApplication3.Controllers
 
 
             //Expression<Func<Ticket, bool>> combinedExpr = Expression.Lambda<Func<Ticket, bool>>(
-    
 
 
 
 
 
-            Tickets = _unitOfWork.Ticket.IncludeOther(x=>x.Matches);
-            Tickets = Tickets.Include(x => x.Seats);
+            string[] Tab = { "Matches","Seats"};
+            Tickets = _unitOfWork.Ticket.IncludeOther(Tab);
+           // Tickets = _unitOfWork.Ticket.IncludeOther(x=>x.Seats);
+           // Tickets = _unitOfWork.Ticket.IncludeOther(x=>x.Seats);
+           // Tickets = Tickets.Include(x => x.Seats);
             return View(Tickets);
         }
 
@@ -50,9 +52,15 @@ namespace WebApplication3.Controllers
 
         public IActionResult Create()
         {
-            
+            try
+            {
+
             ViewData["Matchid"] = new SelectList(_unitOfWork.Match.GetAll(),"Id", "MatchName") ;
             ViewData["SeatId"] = new SelectList(_unitOfWork.Seat.GetAll(),"Id","SeatNo");
+            }catch (Exception ex)
+            {
+                TempData["error"]=ex.Message;
+            }
 
             return View();
         }

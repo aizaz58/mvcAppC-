@@ -7,7 +7,9 @@ namespace WebApplication3.Interfaces
     public interface ITicketRepository : IGenericRepository<Ticket>
     {
 
-        public IQueryable<Ticket> IncludeOther(Expression<Func<Ticket,Match>> expression);
+      //  public IQueryable<Ticket> IncludeOther(Expression<Func<Ticket, Seat>> x);
+        public IQueryable<Ticket> IncludeOther(String[] Tab);
+       
     }
 }
 

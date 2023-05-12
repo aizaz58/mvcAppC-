@@ -9,7 +9,7 @@ public class Genericrepository<T>:IGenericRepository<T> where T : class
 {
     private readonly ApplicationDbContext _context;
     private readonly DbSet<T> _dbSet;
-
+    
     public Genericrepository(ApplicationDbContext context)
     {
         this._context = context;

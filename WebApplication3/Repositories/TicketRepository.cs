@@ -17,9 +17,21 @@ public class TicketRepository:Genericrepository<Ticket>,ITicketRepository
         this._context = context;
     }
 
-    public IQueryable<Ticket> IncludeOther(Expression<Func<Ticket,Match>> expression)
+    //public IQueryable<Ticket> IncludeOther(Expression <Func<Ticket, Seat>> expression)
+    //{
+
+    //  //  return _context.Tickets.Include(expression);// => expression.Matches).Include(expression=> expression.Seats);
+    //}
+
+
+    public IQueryable<Ticket> IncludeOther(string[] expression)
     {
 
-        return _context.Tickets.Include(expression);
+        IQueryable<Ticket> Tickets = _context.Tickets;
+        foreach (string item in expression) {
+             Tickets = Tickets.Include(item);
+        }
+        return Tickets;
     }
+
 }
